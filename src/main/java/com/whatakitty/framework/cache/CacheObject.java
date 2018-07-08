@@ -71,7 +71,7 @@ public class CacheObject<K, V> {
      *
      * @return return true if item expired or false
      */
-    boolean isExpired() {
+    public boolean isExpired() {
         if (ttl == 0) {
             return false;
         }
@@ -85,7 +85,7 @@ public class CacheObject<K, V> {
      * @throws ExecutionException   execution exception
      * @throws InterruptedException interrupted exception
      */
-    Optional<V> getObject() throws ExecutionException, InterruptedException {
+    public Optional<V> getObject() throws ExecutionException, InterruptedException {
         lastAccess = System.currentTimeMillis();
         accessCount++;
         if (futureResult == null) {
