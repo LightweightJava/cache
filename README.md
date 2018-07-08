@@ -1,6 +1,7 @@
 # KITTY缓存
 
 [![Build Status](https://travis-ci.com/LightweightJava/cache.svg?branch=master)](https://travis-ci.com/LightweightJava/cache)
+[![Coverage Status](https://coveralls.io/repos/github/LightweightJava/cache/badge.svg)](https://coveralls.io/github/LightweightJava/cache)
 
 ## FEATURES
 
