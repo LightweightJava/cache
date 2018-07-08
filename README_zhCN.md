@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/LightweightJava/cache.svg?branch=master)](https://travis-ci.com/LightweightJava/cache)
 [![Coverage Status](https://coveralls.io/repos/github/LightweightJava/cache/badge.svg)](https://coveralls.io/github/LightweightJava/cache)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8248471e4eb94469b78a3788d2a1d8f4)](https://www.codacy.com/app/WhatAKitty/cache?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LightweightJava/cache&amp;utm_campaign=Badge_Grade)
 
 ## FEATURES
 
