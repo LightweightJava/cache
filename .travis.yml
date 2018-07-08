@@ -1,1 +1,12 @@
 language: java
+sudo: false
+script: mvn clean verify
+after_success:
+  - mvn clean test
+  - mvn jacoco:report
+  - mvn coveralls:report -DrepoToken="${COVERALLS_TOKEN}"
+
+## 加密后的token字串
+env:
+  global:
+    - secure: "C00olRXa3fjvQN6kR3/4Q57qmDqhcaUrbzykSmwMTiZtl+0LyA+/rX2W1DtCUgkXU8bKoHFODZWZGCfr5q8+6QARs8f42I9zZOxVW9lVRcm5Z1QDnm0jcWLqeohgYjTj2jsuAemoSxkjI9wiwn8sUX/WJ4a8gj0sHdhAp0mmIVM5Y9Ix/41HOl15cyNIZPkTNJHvVd2QDX70jVp8XsF6hohuxFCFwyT9lY6LXdxsPXevOFGzXivwEOzUR6I24cFQsNOoehes19Z224schOhkOc2qVL7iuDAglfLOZkcz2xaz/4kZ62XZdpaQcJQUMRaIQmRH/luJ0KvAh8s2ggg1ir5JfeW9nKveoEWbwL1DT4q79JWSy0OmStr0vLaFZn6D9HvHKp/GdKQ4aerxsoo899t8LQpCJLxvRoyL4XtE2CTxAtxWuJnU4qY+urAdP2M3CeiRsxoRgRPIwG4ZoyulRvfkNU9s69IoUBm1zmOqfpdA1i4ATfdAOf6yk77bKjQopvw3IQfyQ3TEUlPgrzloJ0sXs41a+fK+Z1eghhScktEXRBcdEuFcAiUaivpWoFY7Hx26s/xmPN4Zt4Q/eeaJ9N9Pk46FBk+SG8UXOrHZey9Pv9TiHCVhaZW82RnMaKFIWjxYFhtAI1aZH6SlQKTsy1cNBXGw7onOqzzYPUh+kt8="
