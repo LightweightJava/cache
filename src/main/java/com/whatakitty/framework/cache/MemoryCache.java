@@ -1,10 +1,12 @@
 package com.whatakitty.framework.cache;
 
+import com.rits.cloning.Cloner;
 import com.whatakitty.framework.cache.exception.CacheLoaderFailedException;
 import com.whatakitty.framework.cache.utils.Asserts;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.locks.StampedLock;
@@ -20,9 +22,11 @@ public class MemoryCache<K, V> implements Cache<K, V> {
 
     private final Map<K, CacheObject<K, V>> cacheMap;
     private final StampedLock stampedLock = new StampedLock();
+    private final CacheTimeoutHelper<K, V> cacheTimeoutHelper;
 
     public MemoryCache(int cap) {
         cacheMap = new HashMap<>(cap);
+        cacheTimeoutHelper = new CacheTimeoutHelper<>(this, 5);
     }
 
     @Override
@@ -30,6 +34,11 @@ public class MemoryCache<K, V> implements Cache<K, V> {
         long stamp = stampedLock.writeLock();
 
         try {
+            // do clean task if clean task is not started
+            if (!cacheTimeoutHelper.isStarted()) {
+                cacheTimeoutHelper.start();
+            }
+
             CacheObject<K, V> cacheObject = CacheObject.createValueCache(key, value, timeout);
             cacheMap.put(key, cacheObject);
         } finally {
@@ -97,6 +106,39 @@ public class MemoryCache<K, V> implements Cache<K, V> {
     @Override
     public int size() {
         return cacheMap.size();
+    }
+
+    @Override
+    public Set<K> keys() {
+        long stamp = stampedLock.readLock();
+
+        try {
+            return cacheMap.keySet();
+        } finally {
+            stampedLock.unlockRead(stamp);
+        }
+    }
+
+    @Override
+    public Map<K, CacheObject<K, V>> snapshot() {
+        long stamp = stampedLock.readLock();
+
+        try {
+
+            final Cloner cloner = new Cloner();
+            final Map<K, CacheObject<K, V>> cloned = new HashMap<>(cacheMap.size());
+
+            for (Map.Entry<K, CacheObject<K, V>> entry : cacheMap.entrySet()) {
+                CacheObject<K, V> value = entry.getValue();
+                CacheObject<K, V> clonedValue = cloner.deepClone(value);
+                cloned.put(entry.getKey(), clonedValue);
+            }
+
+            return cloned;
+
+        } finally {
+            stampedLock.unlockRead(stamp);
+        }
     }
 
 }

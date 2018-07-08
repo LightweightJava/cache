@@ -12,7 +12,7 @@
 - [x] Memory Cache
 - [ ] Cache Persistence
 - [ ] Distributed Cache
-- [ ] Timeout
+- [x] Timeout
 - [ ] FIFO/LFU/LRU Strategy
 - [ ] Hierarchical cache（Memory -> Other node -> Datasource）
 
@@ -21,5 +21,6 @@
 ### V1.0
 
 - [x] Memory Cache
-- [ ] Timeout
+- [x] Timeout
 - [x] Hierarchical cache（Memory -> Datasource）
+- [ ] Usage document

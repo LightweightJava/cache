@@ -1,7 +1,9 @@
 package com.whatakitty.framework.cache;
 
 import com.whatakitty.framework.cache.exception.CacheLoaderFailedException;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * cache interface
@@ -81,5 +83,19 @@ public interface Cache<K, V> {
      * @return cache size
      */
     int size();
+
+    /**
+     * the cached keys
+     *
+     * @return keys set
+     */
+    Set<K> keys();
+
+    /**
+     * Snapshot of this cache
+     *
+     * @return
+     */
+    Map<K, CacheObject<K, V>> snapshot();
 
 }
