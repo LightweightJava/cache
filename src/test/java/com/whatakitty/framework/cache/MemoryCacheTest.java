@@ -1,7 +1,9 @@
 package com.whatakitty.framework.cache;
 
 import com.whatakitty.framework.cache.exception.CacheLoaderFailedException;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -54,6 +56,30 @@ public class MemoryCacheTest {
     }
 
     @Test
+    public void getWithException() {
+        MemoryCache<String, String> testCache = new MemoryCache<>(1);
+        try {
+            testCache.get("name", () -> {
+                throw new RuntimeException("test");
+            });
+        } catch (InterruptedException | CacheLoaderFailedException e) {
+            Assert.assertTrue(e instanceof CacheLoaderFailedException);
+        }
+    }
+
+    @Test
+    public void getWithEmpty() {
+        MemoryCache<String, String> testCache = new MemoryCache<>(1);
+        try {
+            Optional<String> result = testCache.get("name");
+
+            Assert.assertFalse(result.isPresent());
+        } catch (InterruptedException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void remove() {
         MemoryCache<String, String> testCache = new MemoryCache<>(1);
         testCache.put("name", "kitty");
@@ -86,6 +112,33 @@ public class MemoryCacheTest {
         } catch (InterruptedException e) {
             Assert.fail();
         }
+    }
+
+    @Test
+    public void snapshot() {
+        MemoryCache<String, String> testCache = new MemoryCache<>(1);
+        testCache.put("name", "kitty");
+        testCache.put("sex", "body");
+
+        Map<String, CacheObject<String, String>> snapshot = testCache.snapshot();
+
+        testCache.remove("name");
+
+        Assert.assertEquals(snapshot.size(), 2);
+        try {
+            CacheObject<String, String> nameCache = snapshot.get("name");
+            Optional<String> nameOptional = nameCache.getObject();
+            Assert.assertTrue(nameOptional.isPresent());
+            Assert.assertEquals("kitty", nameOptional.get());
+
+            CacheObject<String, String> sexCache = snapshot.get("sex");
+            Optional<String> sexOptional = sexCache.getObject();
+            Assert.assertTrue(sexOptional.isPresent());
+            Assert.assertEquals("body", sexOptional.get());
+        } catch (InterruptedException | ExecutionException e) {
+            Assert.fail();
+        }
+
     }
 
 }
