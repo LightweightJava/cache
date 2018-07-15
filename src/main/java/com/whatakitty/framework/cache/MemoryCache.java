@@ -120,6 +120,17 @@ public class MemoryCache<K, V> implements Cache<K, V> {
     }
 
     @Override
+    public boolean contains(K key) {
+        long stamp = stampedLock.readLock();
+
+        try {
+            return cacheMap.containsKey(key);
+        } finally {
+            stampedLock.unlockRead(stamp);
+        }
+    }
+
+    @Override
     public Map<K, CacheObject<K, V>> snapshot() {
         long stamp = stampedLock.readLock();
 

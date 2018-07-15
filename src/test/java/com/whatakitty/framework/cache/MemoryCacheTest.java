@@ -141,4 +141,14 @@ public class MemoryCacheTest {
 
     }
 
+    @Test
+    public void contains() {
+        MemoryCache<String, String> testCache = new MemoryCache<>(1);
+        testCache.put("name", "kitty");
+        testCache.put("sex", "body");
+
+        Assert.assertTrue(testCache.contains("name"));
+        Assert.assertTrue(testCache.contains("sex"));
+        Assert.assertFalse(testCache.contains("unknown_key"));
+    }
 }

@@ -92,6 +92,14 @@ public interface Cache<K, V> {
     Set<K> keys();
 
     /**
+     * if the cache contains the certain cache item
+     *
+     * @param key the key that need to checked
+     * @return true if the cache contains or false
+     */
+    boolean contains(K key);
+
+    /**
      * Snapshot of this cache
      *
      * @return
